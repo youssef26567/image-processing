@@ -10,17 +10,22 @@ router.get(
   "/api",
   function (req: express.Request, res: express.Response): void {
     //check if query parameter sent
-    if (!req.query.width || !req.query.height || !req.query.filename) {
-      res.status(400).send("Please, enter your filename,width,height");
-    } else {
+    if (req.query.filename==null) {
+      res.status(400).send("Please, enter your filename");
+    } 
+    
+    else if(req.query.width==null || req.query.height==null){
+     res.status(400).send("with or height must assign to a value");
+  }
+    else {
       const filename: string = req.query.filename as string;
       // eslint-disable-next-line prettier/prettier
 
       const width = req.query.width
-        ? parseInt(req.query.width as string)
+        ? parseInt(req.query.width as string,10)
         : null;
       const height = req.query.height
-        ? parseInt(req.query.height as string)
+        ? parseInt(req.query.height as string,10)
         : null;
       const unresized = path.resolve(
         __dirname,
@@ -34,7 +39,7 @@ router.get(
       );
       if (width == 0 || height == 0) {
         res.status(500).send("width or height must not be assigend to zero");
-      } else if (!Number(width) || !Number(height)) {
+      } else if (String(width) || String(height)) {
         res.status(500).send("Width or height must be a number");
       } else if (width == -1 || height == -1) {
         res.status(500).send("width or height must not be negative value");
