@@ -39,7 +39,7 @@ router.get(
       );
       if (width == 0 || height == 0) {
         res.status(500).send("width or height must not be assigend to zero");
-      } else if (String(width) || String(height)) {
+      } else if (!Number(width) || !Number(height)) {
         res.status(500).send("Width or height must be a number");
       } else if (width == -1 || height == -1) {
         res.status(500).send("width or height must not be negative value");
